@@ -1,0 +1,83 @@
+GET http://localhost:5001/superheroes
+
+###
+
+GET http://localhost:5001/superheroes/Batman
+
+###
+
+POST http://localhost:5001/superheroes
+Content-Type: application/json
+
+{
+    "name": "Batman",
+    "debut": "01-01-1932",
+    "secretIdentity": "Bruce Wayne"
+}
+
+###
+
+POST http://localhost:5001/superheroes
+Content-Type: application/json
+
+{
+    "name": "Superman",
+    "debut": "01-01-1933",
+    "secretIdentity": "Clark Kent"
+}
+
+###
+
+POST http://localhost:5001/superheroes
+Content-Type: application/json
+
+{
+    "name": "The Flash",
+    "debut": "01-01-1934",
+    "secretIdentity": "Barry Allen"
+}
+
+###
+
+POST http://localhost:5001/superheroes
+Content-Type: application/json
+
+{
+    "name": "Spiderman",
+    "debut": "01-01-1932",
+    "secretIdentity": "Peter Parker"
+}
+
+###
+
+//delete spiderman
+DELETE http://localhost:5001/superheroes/644b157170658b89412c3b3e
+
+###
+
+//create new spiderman with wrong data
+POST http://localhost:5001/superheroes
+Content-Type: application/json
+
+{
+    "name": "Spoderman",
+    "debut": "01-01-1912",
+    "secretIdentity": "Peter Porker"
+}
+
+###
+
+//get spidermand id
+GET http://localhost:5001/superheroes/Spoderman
+
+###
+
+PATCH http://localhost:5001/superheroes/644b1d4ad18df797ded4ae58
+
+Content-Type: application/json
+
+{
+    "name": "Spiderman",
+    "debut": "01-01-1932",
+    "secretIdentity": "Peter Parker"
+}
