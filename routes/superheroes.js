@@ -2,15 +2,46 @@ const express = require('express')
 const router = express.Router()
 const Superhero = require('../models/superhero')
 
+// router.use(getSuperHeroByName) - this would make all routes use the getSuperHeroByName middleware
+
 //Get all superheroes
-router.get('/', async (req, res) => {    
-    try {
-        const superheroes = await Superhero.find()
-        res.json(superheroes)
-    } catch (error) {
-        res.status(500).json({ message: error.message })
+
+router.get('/', paginatedResults(Superhero), (req, res) => {
+    res.json(res.paginatedResults)
+  })
+  
+function paginatedResults(model) {
+    return async (req, res, next) => {
+        const page = parseInt(req.query.page)
+        const limit = parseInt(req.query.limit)
+
+        const startIndex = (page - 1) * limit
+        const endIndex = page * limit
+
+        const results = {}
+
+        if (endIndex < await model.countDocuments().exec()) {
+        results.next = {
+            page: page + 1,
+            limit: limit
+        }
+        }
+        
+        if (startIndex > 0) {
+        results.previous = {
+            page: page - 1,
+            limit: limit
+        }
+        }
+        try {
+            results.results = await model.find().limit(limit).skip(startIndex).exec()
+            res.paginatedResults = results
+        next()
+        } catch (e) {
+            res.status(500).json({ message: e.message })
+        }
     }
-})
+}
 
 //Get a specific superhero
 router.get('/:name', getSuperHeroByName, (req, res) => {    
@@ -20,6 +51,7 @@ router.get('/:name', getSuperHeroByName, (req, res) => {
 
 //Create a superhero entry
 router.post('/', async (req, res) => {
+    // new Superhero and superhero.save() can be combined into 'await User.create()'
     const superhero = new Superhero({
         name: req.body.name,
         debut: req.body.debut,
@@ -63,6 +95,40 @@ router.delete('/:id', getSuperHeroById, async (req, res) => {
     }
 })
 
+// all request sharing the same route can also be chained using router.route
+
+/*
+The code below is the same as declaring individual routes for delete and patch as above
+
+router
+    .route('/:id')
+    .delete(getSuperHeroById, async (req, res) => {
+        try {
+            await res.superHero.deleteOne()
+            res.json({message: 'Delete Successful'})
+        } catch (error) {
+            res.status(500).json({message: error.message})
+        }
+    })
+    .patch(getSuperHeroById, async (req, res) => {
+        if (req.body.name != null) {
+            res.superHero.name = req.body.name
+        }
+        if (req.body.debut != null) {
+            res.superHero.debut = req.body.debut
+        }
+        if (req.body.secretIdentity != null) {
+            res.superHero.secretIdentity = req.body.secretIdentity
+        }
+        try {
+            const updatedSuperHero = await res.superHero.save()
+            res.json(updatedSuperHero)
+        } catch (error) {
+            res.status(400),json({message: error.message})
+        }
+    })
+*/
+
 //middleware to fetch a superhero by name since many of the routes are using this
 async function getSuperHeroByName(req, res, next) {
     let superHero = undefined
@@ -92,6 +158,5 @@ async function getSuperHeroById(req, res, next) {
     res.superHero = superHero
     next()
 }
-
 
 module.exports = router

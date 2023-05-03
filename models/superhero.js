@@ -14,6 +14,10 @@ const superHeroSchema = new mongoose.Schema({
         type: String,
         required: false
     },
+    archNemesis: {
+        type: mongoose.SchemaTypes.ObjectId, // reference to another schema
+        required: false
+    }
 
 })
 

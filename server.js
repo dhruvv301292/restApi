@@ -8,9 +8,9 @@ const db = mongoose.connection
 db.on('error', (error) => console.log(error))
 db.once('connected', () => console.log('Connected to DB'))
 
-app.use(express.json())
+app.use(express.json()) // middleware function to tell express to expect json requests
 
 const superheroesRouter = require('./routes/superheroes')
-app.use('/superheroes', superheroesRouter)
+app.use('/superheroes', superheroesRouter) // all routes in this router start with /superheroes
 
 app.listen(5001, () => console.log('Server started'))
