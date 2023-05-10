@@ -1,8 +1,16 @@
-GET http://localhost:5001/superheroes
+GET http://localhost:5001/superheroes?page=1&limit=10
+
+###
+
+GET http://localhost:5001/supervillains?page=1&limit=10
 
 ###
 
 GET http://localhost:5001/superheroes/Batman
+
+###
+
+GET http://localhost:5001/supervillains/Brainiac
 
 ###
 
@@ -13,6 +21,26 @@ Content-Type: application/json
     "name": "Batman",
     "debut": "01-01-1932",
     "secretIdentity": "Bruce Wayne"
+}
+
+###
+
+POST http://localhost:5001/supervillains
+Content-Type: application/json
+
+{
+    "name": "Joker",
+    "debut": "01-01-1932"
+}
+
+###
+
+POST http://localhost:5001/supervillains
+Content-Type: application/json
+
+{
+    "name": "Brainiac",
+    "debut": "01-01-1934"
 }
 
 ###
@@ -68,16 +96,64 @@ Content-Type: application/json
 ###
 
 //get spidermand id
-GET http://localhost:5001/superheroes/Spoderman
+GET http://localhost:5001/superheroes/Superman
 
 ###
 
-PATCH http://localhost:5001/superheroes/644b1d4ad18df797ded4ae58
-
+PATCH http://localhost:5001/superheroes/645ac406ceee272640bc5bb7
 Content-Type: application/json
 
 {
-    "name": "Spiderman",
-    "debut": "01-01-1932",
-    "secretIdentity": "Peter Parker"
+    "name": "Spiderman"
 }
+
+###
+
+PATCH http://localhost:5001/superheroes/645ac3fcceee272640bc5bb1
+Content-Type: application/json
+
+{
+    "enemy": "645ad84fec8efb248297b31a"
+}
+
+###
+
+PATCH http://localhost:5001/superheroes/645ac400ceee272640bc5bb3
+Content-Type: application/json
+
+{
+    "enemy": "645ad86fec8efb248297b31e"
+}
+
+###
+
+PATCH http://localhost:5001/supervillains/645ad86fec8efb248297b31e
+Content-Type: application/json
+
+{
+    "enemy": "645ac400ceee272640bc5bb3"
+}
+
+###
+
+//create new spiderman with wrong data
+POST http://localhost:5001/supervillains
+Content-Type: application/json
+
+{
+    "name": "ReverseFlash",
+    "debut": "01-01-1912",
+    "archNemesis": "645ac403ceee272640bc5bb5"
+}
+
+###
+
+PATCH http://localhost:5001/superheroes/645ac403ceee272640bc5bb5
+Content-Type: application/json
+
+{
+    "enemy": "645b0066d1a2b0386ae204ca"
+}
+
+###
+GET http://localhost:5001/superheroes/Spiderman

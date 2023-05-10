@@ -4,12 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "devStart": "nodemon server.js"
+    "restStart": "nodemon server.js",
+    "graphStart": "nodemon serverGraphQL.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "express": "^4.18.2",
+    "express-graphql": "^0.12.0",
+    "graphql": "^16.6.0",
     "mongoose": "^7.1.0"
   },
   "devDependencies": {

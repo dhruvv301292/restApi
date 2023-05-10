@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const superHeroSchema = new mongoose.Schema({
+const superVillainSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true
@@ -10,17 +10,13 @@ const superHeroSchema = new mongoose.Schema({
         required: true
 
     },
-    secretIdentity: {
-        type: String,
-        required: false
-    },
     archNemesis: {
         type: mongoose.SchemaTypes.ObjectId, // reference to another schema
         required: false,
-        ref: 'Supervillain' 
+        ref: 'Superhero'
     }
 
 })
 
 // first argument is the name of the model in the db
-module.exports = mongoose.model('Superhero', superHeroSchema)
+module.exports = mongoose.model('Supervillain', superVillainSchema)

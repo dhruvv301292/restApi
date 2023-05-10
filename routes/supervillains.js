@@ -1,12 +1,12 @@
 const express = require('express')
 const router = express.Router()
-const Superhero = require('../models/superhero')
+const Supervillain = require('../models/supervillain')
 
 // router.use(getSuperHeroByName) - this would make all routes use the getSuperHeroByName middleware
 
-//Get all superheroes
+//Get all supervillains
 
-router.get('/', paginatedResults(Superhero), (req, res) => {
+router.get('/', paginatedResults(Supervillain), (req, res) => {
     res.json(res.paginatedResults)
   })
   
@@ -44,54 +44,50 @@ function paginatedResults(model) {
 }
 
 //Get a specific superhero
-router.get('/:name', getSuperHeroByName, (req, res) => {    
-    res.json(res.superHero)
+router.get('/:name', getSuperVillainByName, (req, res) => {    
+    res.json(res.superVillain)
 })
 
 
 //Create a superhero entry
 router.post('/', async (req, res) => {
-    // new Superhero and superhero.save() can be combined into 'await User.create()'
-    const superhero = new Superhero({
+    // new superVillain and superVillain.save() can be combined into 'await User.create()'
+    const superVillain = new Supervillain({
         name: req.body.name,
-        debut: req.body.debut,
-        secretIdentity: req.body.secretIdentity
+        debut: req.body.debut
     })
     try {
-        const newSuperhero = await superhero.save()
-        res.status(201).json(newSuperhero)
+        const newSuperVillain = await superVillain.save()
+        res.status(201).json(newSuperVillain)
     } catch (error) {
         res.status(400).json({ message: error.message })
     }    
 })
 
 // update a superhero entry
-router.patch('/:id', getSuperHeroById, async (req, res) => {
+router.patch('/:id', getSuperVillainById, async (req, res) => {
     if (req.body.name != null) {
-        res.superHero.name = req.body.name
+        res.superVillain.name = req.body.name
     }
     if (req.body.debut != null) {
-        res.superHero.debut = req.body.debut
-    }
-    if (req.body.secretIdentity != null) {
-        res.superHero.secretIdentity = req.body.secretIdentity
+        res.superVillain.debut = req.body.debut
     }
     if (req.body.enemy != null) {
-        res.superHero.archNemesis = req.body.enemy
+        res.superVillain.archNemesis = req.body.enemy
     }
     try {
-        const updatedSuperHero = await res.superHero.save()
-        res.json(updatedSuperHero)
+        const updatedSuperVillain = await res.superVillain.save()
+        res.json(updatedSuperVillain)
     } catch (error) {
         res.status(400).json({message: error.message})
     }
 })
 
 
-//delete a superhero
-router.delete('/:id', getSuperHeroById, async (req, res) => {
+//delete a superVillain
+router.delete('/:id', getSuperVillainById, async (req, res) => {
     try {
-        await res.superHero.deleteOne()
+        await res.superVillain.deleteOne()
         res.json({message: 'Delete Successful'})
     } catch (error) {
         res.status(500).json({message: error.message})
@@ -132,33 +128,33 @@ router
     })
 */
 
-//middleware to fetch a superhero by name since many of the routes are using this
-async function getSuperHeroByName(req, res, next) {
-    let superHero = undefined
+//middleware to fetch a superVillain by name since many of the routes are using this
+async function getSuperVillainByName(req, res, next) {
+    let superVillain = undefined
     try {
-        superHero = await Superhero.find({"name": req.params.name}).populate('archNemesis')
-        if (superHero == null) {
-            return res.status(404).json({messsage: "Cannot find superhero with name: " + req.params.name})
+        superVillain = await Supervillain.find({"name": req.params.name}).populate("archNemesis")
+        if (superVillain == null) {
+            return res.status(404).json({messsage: "Cannot find superVillain with name: " + req.params.name})
         }
     } catch (error) {
         res.status(500).json({message: error.message})
     }
-    res.superHero = superHero
+    res.superVillain = superVillain
     next()
 }
 
-//middleware to fetch a superhero by id since many of the routes are using this
-async function getSuperHeroById(req, res, next) {
-    let superHero;
+//middleware to fetch a superVillain by id since many of the routes are using this
+async function getSuperVillainById(req, res, next) {
+    let superVillain;
     try {
-        superHero = await Superhero.findById(req.params.id)
-        if (superHero == null) {
-            return res.status(404).json({messsage: "Cannot find superhero with id: " + req.params.id})
+        superVillain = await Supervillain.findById(req.params.id)
+        if (superVillain == null) {
+            return res.status(404).json({messsage: "Cannot find superVillain with id: " + req.params.id})
         }
     } catch (error) {
         res.status(500).json({message: error.message})
     }
-    res.superHero = superHero
+    res.superVillain = superVillain
     next()
 }
 
